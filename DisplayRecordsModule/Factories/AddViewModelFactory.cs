@@ -4,20 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DisplayRecordsModule.Interfaces.Views;
+using DisplayRecordsModule.Services;
 using DisplayRecordsModule.ViewModels;
 using DisplayRecordsModule.Views;
+using log4net;
 
 namespace DisplayRecordsModule.Factories
 {
     public class AddViewModelFactory : IAddViewModelFactory
     {
-        public AddViewModelFactory()
+        private readonly IDisplayModuleService _displayModuleService;
+        private readonly ILog _log;
+
+        public AddViewModelFactory(IDisplayModuleService displayModuleService, ILog log)
         {
+            _displayModuleService = displayModuleService;
+            _log = log;
         }
 
         private IAddViewModel Create()
         {
-            return new AddRecordViewModel();
+            return new AddRecordViewModel(_displayModuleService, _log);
         }
 
         public IAddRecordView CreateView()

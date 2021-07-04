@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Common;
 using DisplayRecordsModule.Models;
+using DisplayRecordsModule.Services;
+using log4net;
 using Microsoft.Practices.Prism.Commands;
 
 namespace DisplayRecordsModule.ViewModels
@@ -13,9 +17,15 @@ namespace DisplayRecordsModule.ViewModels
     public class AddRecordViewModel : BaseNotificationObject, IAddViewModel
     {
         private UserDetail _data;
+        private readonly SerialDisposable _disposable = new SerialDisposable();
+        private readonly IDisplayModuleService _displayModuleService;
+        private readonly ILog _log;
 
-        public AddRecordViewModel()
+
+        public AddRecordViewModel(IDisplayModuleService displayModuleService, ILog log)
         {
+            _displayModuleService = displayModuleService;
+            _log = log;
             UserData = new UserDetail();
             SaveCommand = new DelegateCommand(Save, () => true);
         }
@@ -30,14 +40,20 @@ namespace DisplayRecordsModule.ViewModels
         public ICommand SaveCommand { get; }
         #endregion
 
-        private void Save()
+        public void Save()
         {
             try
             {
-               //call service to save
+                _disposable.Disposable = Observable.FromAsync(async () =>
+                        await _displayModuleService.SaveUserAsync(UserData))
+                    .Subscribe(userInfo =>
+                    {
+                        UserData = userInfo;
+                    });
             }
             catch (Exception ex)
             {
+                _log.Error(ex);
             }
         }
 

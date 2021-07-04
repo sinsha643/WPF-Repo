@@ -1,28 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Common;
+﻿using Common;
 using DisplayRecordsModule.Factories;
 using DisplayRecordsModule.Models;
+using DisplayRecordsModule.Services;
+using log4net;
 using Microsoft.Practices.Prism.Commands;
+using System;
+using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows.Input;
 
 namespace DisplayRecordsModule.ViewModels
 {
     public class DisplayRecordsViewModel : BaseNotificationObject
     {
-        protected ObservableCollection<UserDetail> _userDetails;
+        private ObservableCollection<UserDetail> _userDetails;
         private bool _isBusy;
         private readonly IWindowService _windowService;
         private readonly IAddViewModelFactory _addViewModelFactory;
+        private readonly IDisplayModuleService _displayModuleService;
+        private readonly SerialDisposable _disposable = new SerialDisposable();
+
+        private readonly ILog _log;
         public DisplayRecordsViewModel(IWindowService windowService, 
-                                       IAddViewModelFactory addViewModelFactory)
+                                       IAddViewModelFactory addViewModelFactory,
+                                       IDisplayModuleService displayModuleService,
+                                       ILog log)
         {
             _windowService = windowService;
             _addViewModelFactory = addViewModelFactory;
+            _displayModuleService = displayModuleService;
+            _log = log;
             SearchCommand = new DelegateCommand(Search, () => !IsBusy);
             AddCommand = new DelegateCommand(Add, () => true);
             Search();
@@ -58,17 +66,15 @@ namespace DisplayRecordsModule.ViewModels
             {
                 IsBusy = true;
 
-                //dummy data
-                var listOfData = new ObservableCollection<UserDetail>();
-                listOfData.Add(new UserDetail { UserId = "S1", FirstName = "Alex", LastName = "Philip", Role = "Read", Location = "LONDON", IsActive = true });
-                listOfData.Add(new UserDetail { UserId = "S2", FirstName = "Linda", LastName = "Al", Role = "Write", Location = "CHICAGO", IsActive = true });
-                listOfData.Add(new UserDetail { UserId = "S3", FirstName = "Joy", LastName = "Phil", Role = "Admin", Location = "SINGAPORE", IsActive = false });
-                listOfData.Add(new UserDetail { UserId = "S4", FirstName = "Rachel", LastName = "Roy", Role = "Read", Location = "LONDON", IsActive = true });
+                //GET service call
+                _disposable.Disposable = Observable.FromAsync(async () =>
+                        await _displayModuleService.GetUserDetailsAsync())
+                    .Subscribe(s =>
+                    {
+                        UserDetails = new ObservableCollection<UserDetail>(s);
+                        IsBusy = false;
+                    }, LostServerConnection);
 
-                UserDetails = listOfData;
-
-
-                //call service
             }
             catch (Exception ex)
             {
@@ -79,6 +85,7 @@ namespace DisplayRecordsModule.ViewModels
         private void LostServerConnection(Exception ex)
         {
             IsBusy = false;
+            _log.Info("lost server connection");
         }
         #endregion
 
