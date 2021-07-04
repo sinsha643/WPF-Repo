@@ -15,8 +15,9 @@ namespace Common.Enums
 
         #region UserDetails url extensions
 
-        [Description("User")] AllRecords,
+        [Description("User/GetAll")] AllRecords,
 
+        [Description("User/Create")] CreateRecord,
         #endregion
 
     }

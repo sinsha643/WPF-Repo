@@ -80,6 +80,10 @@ namespace DisplayRecordsModule.ViewModels
             {
                 LostServerConnection(ex);
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private void LostServerConnection(Exception ex)

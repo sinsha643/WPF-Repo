@@ -18,6 +18,7 @@ namespace DisplayRecordsModule.Services
         private readonly ILog _log;
         private readonly IRestClient _restClient;
         protected readonly string AllRecords = EnumDescriptionSelector.EnumDescription(UrlExtensions.AllRecords);
+        protected readonly string CreateRecord = EnumDescriptionSelector.EnumDescription(UrlExtensions.CreateRecord);
 
         public DisplayModuleService(ILog log, IRestClient restClient)
         {
@@ -51,7 +52,7 @@ namespace DisplayRecordsModule.Services
             //translate model to json content
             var userJson = JsonConvert.SerializeObject(userDetail, new JsonSerializerSettings { ContractResolver = contractResolver, Formatting = Formatting.Indented });
 
-            using (var restParams = new RestParams(_log, AllRecords, userJson))
+            using (var restParams = new RestParams(_log, CreateRecord, userJson))
             {
                 try
                 {

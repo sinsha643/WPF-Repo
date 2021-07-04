@@ -37,7 +37,7 @@
                   Text="{Binding UserData.Role,UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <Label Grid.Row="0" Margin="5" Grid.Column="3" Content="Active:"></Label>
         <CheckBox AutomationProperties.AutomationId="maintainSystemAccount" KeyboardNavigation.TabIndex="1" Grid.Row="0" Margin="5" Grid.Column="4" Width="200" 
-                  IsChecked="{Binding UserData.IsActive.Value}"></CheckBox>
+                  IsChecked="{Binding UserData.IsActive}"></CheckBox>
         <Label Grid.Row="1" Margin="5" Grid.Column="3" Content="First Name:"></Label>
         <TextBox  Grid.Row="1" Grid.Column="4" AutomationProperties.AutomationId="maintainFirstName" KeyboardNavigation.TabIndex="3" Margin="5" MaxLength="127" Width="200"  
                   Text="{Binding UserData.FirstName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
