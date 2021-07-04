@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TestWPFApp
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainShellView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainShellView : Window
     {
-        public MainWindow()
+        public MainShellView()
         {
             InitializeComponent();
         }
