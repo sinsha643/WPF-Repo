@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPFApp", "TestWPFApp\TestWPFApp.csproj", "{FA0C5282-8812-4800-BB7B-6F76E4A65A04}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{C575098E-513B-4DE6-8637-E400AC28D69B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayRecordsModule", "DisplayRecordsModule\DisplayRecordsModule.csproj", "{E5645BA7-6164-4F97-9DFF-E199BFD409D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{10EA9C65-87BA-494E-92EC-276345165C0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +21,20 @@ Global
 		{FA0C5282-8812-4800-BB7B-6F76E4A65A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA0C5282-8812-4800-BB7B-6F76E4A65A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA0C5282-8812-4800-BB7B-6F76E4A65A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5645BA7-6164-4F97-9DFF-E199BFD409D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5645BA7-6164-4F97-9DFF-E199BFD409D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5645BA7-6164-4F97-9DFF-E199BFD409D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5645BA7-6164-4F97-9DFF-E199BFD409D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10EA9C65-87BA-494E-92EC-276345165C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10EA9C65-87BA-494E-92EC-276345165C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10EA9C65-87BA-494E-92EC-276345165C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10EA9C65-87BA-494E-92EC-276345165C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E5645BA7-6164-4F97-9DFF-E199BFD409D4} = {C575098E-513B-4DE6-8637-E400AC28D69B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35

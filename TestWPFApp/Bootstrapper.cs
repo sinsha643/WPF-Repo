@@ -45,6 +45,9 @@ namespace TestWPFApp
         protected override void ConfigureModuleCatalog()
         {
             base.ConfigureModuleCatalog();
+
+            ModuleCatalog moduleCatalog = (ModuleCatalog)this.ModuleCatalog;
+            moduleCatalog.AddModule(typeof(DisplayRecordsModule.DisplayRecordsModuleInit));
         }
 
         protected override IUnityContainer CreateContainer()
