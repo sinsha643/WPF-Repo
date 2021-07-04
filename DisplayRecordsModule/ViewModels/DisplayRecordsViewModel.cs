@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Common;
+using DisplayRecordsModule.Factories;
 using DisplayRecordsModule.Models;
 using Microsoft.Practices.Prism.Commands;
 
@@ -13,19 +14,24 @@ namespace DisplayRecordsModule.ViewModels
 {
     public class DisplayRecordsViewModel : BaseNotificationObject
     {
-        protected ObservableCollection<UserDetail> _items;
+        protected ObservableCollection<UserDetail> _userDetails;
         private bool _isBusy;
-
-        public DisplayRecordsViewModel()
+        private readonly IWindowService _windowService;
+        private readonly IAddViewModelFactory _addViewModelFactory;
+        public DisplayRecordsViewModel(IWindowService windowService, 
+                                       IAddViewModelFactory addViewModelFactory)
         {
+            _windowService = windowService;
+            _addViewModelFactory = addViewModelFactory;
             SearchCommand = new DelegateCommand(Search, () => !IsBusy);
+            AddCommand = new DelegateCommand(Add, () => true);
             Search();
         }
 
-        public ObservableCollection<UserDetail> Items
+        public ObservableCollection<UserDetail> UserDetails
         {
-            get => _items;
-            set => CompareSetAndNotify(ref _items, value);
+            get => _userDetails;
+            set => CompareSetAndNotify(ref _userDetails, value);
         }
 
         public bool IsBusy
@@ -36,7 +42,15 @@ namespace DisplayRecordsModule.ViewModels
 
         #region Commands
         public ICommand SearchCommand { get; }
+        public ICommand AddCommand { get; }
         #endregion
+
+        #region Methods
+
+        public void Add()
+        {
+            _windowService.ShowWindow(_addViewModelFactory.CreateView());
+        }
 
         public void Search()
         {
@@ -51,7 +65,10 @@ namespace DisplayRecordsModule.ViewModels
                 listOfData.Add(new UserDetail { UserId = "S3", FirstName = "Joy", LastName = "Phil", Role = "Admin", Location = "SINGAPORE", IsActive = false });
                 listOfData.Add(new UserDetail { UserId = "S4", FirstName = "Rachel", LastName = "Roy", Role = "Read", Location = "LONDON", IsActive = true });
 
-                Items = listOfData;
+                UserDetails = listOfData;
+
+
+                //call service
             }
             catch (Exception ex)
             {
@@ -63,5 +80,7 @@ namespace DisplayRecordsModule.ViewModels
         {
             IsBusy = false;
         }
+        #endregion
+
     }
 }

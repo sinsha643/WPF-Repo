@@ -1,0 +1,47 @@
+﻿<Window x:Class="DisplayRecordsModule.Views.AddRecordView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayRecordsModule.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Margin="5" Grid.Column="0" Content="User Id:"></Label>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="TxtUserName" AutomationProperties.AutomationId="maintainUserName" CharacterCasing="Lower" KeyboardNavigation.TabIndex="0" 
+                 MaxLength="10" Margin="5" Width="200"  Text="{Binding UserData.UserId,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Label Grid.Row="1" Margin="5" Grid.Column="0" Content="Last Name:"></Label>
+        <TextBox Grid.Row="1" Grid.Column="1"  AutomationProperties.AutomationId="maintainLastName" KeyboardNavigation.TabIndex="2" MaxLength="127" Margin="5" Width="200" 
+                 Text="{Binding UserData.LastName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+        <Label Grid.Row="2" Margin="5" Grid.Column="0" Content="Location:"></Label>
+        <TextBox  Grid.Row="2" Grid.Column="1" AutomationProperties.AutomationId="maintainRegions" KeyboardNavigation.TabIndex="4" Margin="5" Width="200" 
+                  Text="{Binding UserData.Location, UpdateSourceTrigger=PropertyChanged}">
+        </TextBox>
+        <Label Grid.Row="2" Margin="5" Grid.Column="3" Content="Role:"></Label>
+        <TextBox  Grid.Row="2" Grid.Column="4" AutomationProperties.AutomationId="maintainEmail" KeyboardNavigation.TabIndex="5" Margin="5" MaxLength="127" Width="200"  
+                  Text="{Binding UserData.Role,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Label Grid.Row="0" Margin="5" Grid.Column="3" Content="Active:"></Label>
+        <CheckBox AutomationProperties.AutomationId="maintainSystemAccount" KeyboardNavigation.TabIndex="1" Grid.Row="0" Margin="5" Grid.Column="4" Width="200" 
+                  IsChecked="{Binding UserData.IsActive.Value}"></CheckBox>
+        <Label Grid.Row="1" Margin="5" Grid.Column="3" Content="First Name:"></Label>
+        <TextBox  Grid.Row="1" Grid.Column="4" AutomationProperties.AutomationId="maintainFirstName" KeyboardNavigation.TabIndex="3" Margin="5" MaxLength="127" Width="200"  
+                  Text="{Binding UserData.FirstName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <Button AutomationProperties.AutomationId="_btnUnlock" KeyboardNavigation.TabIndex="7" Width="120" Margin="5" Grid.Row="4" Grid.Column="4" Content="Save" 
+                Command="{Binding SaveCommand}"></Button>
+    </Grid>
+</Window>

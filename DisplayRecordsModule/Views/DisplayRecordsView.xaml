@@ -37,12 +37,13 @@
                     BorderBrush="Transparent"
                     BorderThickness="0" ToolTip="Add"
                     Margin="7, 7, 20,7" Width="25"
-                    Height="30">
+                    Height="30"
+                    Command="{Binding AddCommand}">
                     </Button>
                 </StackPanel>
                 <DataGrid Grid.Row="1" Width="Auto" Margin="0,5,0,0" IsReadOnly="True"
                       ColumnWidth="Auto" AutoGenerateColumns="False"
-                      ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+                      ItemsSource="{Binding UserDetails}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="User Id" Binding="{Binding UserId}" Width="*" />
                         <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*" />
