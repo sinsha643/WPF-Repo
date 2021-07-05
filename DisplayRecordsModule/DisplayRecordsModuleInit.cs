@@ -7,6 +7,7 @@ using Common;
 using DisplayRecordsModule.Factories;
 using DisplayRecordsModule.Interfaces.Views;
 using DisplayRecordsModule.Services;
+using DisplayRecordsModule.UserDetailsWcfService;
 using DisplayRecordsModule.ViewModels;
 using DisplayRecordsModule.Views;
 using Microsoft.Practices.Prism.Modularity;
@@ -39,6 +40,10 @@ namespace DisplayRecordsModule
             _container.RegisterType<IDisplayModuleService, DisplayModuleService>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IRestClient, RestClientImpl>(new ContainerControlledLifetimeManager());
             _container.RegisterType<IHttpClientAdapter, HttpClientAdapter>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IUserDetailCallbackClientService, UserDetailCallbackClientService>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IUserDetailService, UserDetailServiceClient>(new ContainerControlledLifetimeManager());
+
+            _container.RegisterType<ISchedulerProvider, SchedulerProvider>(new ContainerControlledLifetimeManager());
 
             _regionManager.RegisterViewWithRegion("Shell", typeof(Views.DisplayRecordsView));
         }

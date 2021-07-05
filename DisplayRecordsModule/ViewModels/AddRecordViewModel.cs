@@ -20,12 +20,15 @@ namespace DisplayRecordsModule.ViewModels
         private readonly SerialDisposable _disposable = new SerialDisposable();
         private readonly IDisplayModuleService _displayModuleService;
         private readonly ILog _log;
+        private readonly IUserDetailCallbackClientService _userDetailCallbackClientService;
 
-
-        public AddRecordViewModel(IDisplayModuleService displayModuleService, ILog log)
+        public AddRecordViewModel(IDisplayModuleService displayModuleService, 
+                                  ILog log,
+                                  IUserDetailCallbackClientService userDetailCallbackClientService)
         {
             _displayModuleService = displayModuleService;
             _log = log;
+            _userDetailCallbackClientService = userDetailCallbackClientService;
             UserData = new UserDetail();
             SaveCommand = new DelegateCommand(Save, () => true);
         }
@@ -44,18 +47,20 @@ namespace DisplayRecordsModule.ViewModels
         {
             try
             {
-                _disposable.Disposable = Observable.FromAsync(async () =>
-                        await _displayModuleService.SaveUserAsync(UserData))
-                    .Subscribe(userInfo =>
-                    {
-                        UserData = userInfo;
-                    });
+                UserData = _userDetailCallbackClientService.SaveUser(UserData);
+
+                //code for web api call
+                //_disposable.Disposable = Observable.FromAsync(async () =>
+                //        await _displayModuleService.SaveUserAsync(UserData))
+                //    .Subscribe(userInfo =>
+                //    {
+                //        UserData = userInfo;
+                //    });
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
             }
         }
-
     }
 }

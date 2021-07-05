@@ -24,8 +24,10 @@ namespace DisplayRecordsModuleTests.ViewModels
         {
             var log = MockRepository.GenerateStub<ILog>();
             var service = MockRepository.GenerateStub<IDisplayModuleService>();
+            var clientService = MockRepository.GenerateStub<IUserDetailCallbackClientService>();
+
             service.Stub(mock => mock.SaveUserAsync(Arg<UserDetail>.Is.Anything)).Return(Task.FromResult(GetUser()));
-            _addRecordsVm = new AddRecordViewModel(service, log);
+            _addRecordsVm = new AddRecordViewModel(service, log, clientService);
         }
 
         [TestMethod]

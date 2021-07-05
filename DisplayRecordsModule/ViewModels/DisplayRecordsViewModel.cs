@@ -1,6 +1,5 @@
 ﻿using Common;
 using DisplayRecordsModule.Factories;
-using DisplayRecordsModule.Models;
 using DisplayRecordsModule.Services;
 using log4net;
 using Microsoft.Practices.Prism.Commands;
@@ -8,7 +7,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.ServiceModel;
 using System.Windows.Input;
+using UserDetail = DisplayRecordsModule.Models.UserDetail;
 
 namespace DisplayRecordsModule.ViewModels
 {
@@ -20,19 +22,36 @@ namespace DisplayRecordsModule.ViewModels
         private readonly IAddViewModelFactory _addViewModelFactory;
         private readonly IDisplayModuleService _displayModuleService;
         private readonly SerialDisposable _disposable = new SerialDisposable();
-
+        private readonly IUserDetailCallbackClientService _userDetailCallbackClientService;
         private readonly ILog _log;
-        public DisplayRecordsViewModel(IWindowService windowService, 
+        private readonly CompositeDisposable _subscriptions;
+        private readonly ISchedulerProvider _schedulerProvider;
+
+
+        public DisplayRecordsViewModel(IWindowService windowService,
                                        IAddViewModelFactory addViewModelFactory,
                                        IDisplayModuleService displayModuleService,
-                                       ILog log)
+                                       ILog log,
+                                       IUserDetailCallbackClientService userDetailCallbackClientService,
+                                       ISchedulerProvider scheduleProvider)
         {
             _windowService = windowService;
             _addViewModelFactory = addViewModelFactory;
             _displayModuleService = displayModuleService;
             _log = log;
+            _userDetailCallbackClientService = userDetailCallbackClientService;
+            _schedulerProvider = scheduleProvider;
+
+            _subscriptions = new CompositeDisposable();
             SearchCommand = new DelegateCommand(Search, () => !IsBusy);
             AddCommand = new DelegateCommand(Add, () => true);
+
+            //subscribes to notify method and updates UserDetails accordingly
+            _userDetailCallbackClientService.GetUserDetailStream?
+                .ObserveOn(_schedulerProvider.GetUi())
+                .Subscribe(AddUser)
+                .AddToDisposables(_subscriptions);
+
             Search();
         }
 
@@ -66,14 +85,19 @@ namespace DisplayRecordsModule.ViewModels
             {
                 IsBusy = true;
 
+                UserDetails = _userDetailCallbackClientService.GetAllUsers();
+
                 //GET service call
-                _disposable.Disposable = Observable.FromAsync(async () =>
-                        await _displayModuleService.GetUserDetailsAsync())
-                    .Subscribe(s =>
-                    {
-                        UserDetails = new ObservableCollection<UserDetail>(s);
-                        IsBusy = false;
-                    }, LostServerConnection);
+                //_disposable.Disposable = Observable.FromAsync(async () =>
+                //        await _displayModuleService.GetUserDetailsAsync())
+                //    .Subscribe(s =>
+                //    {
+                //        UserDetails = new ObservableCollection<UserDetail>(s);
+                //        IsBusy = false;
+                //    }, LostServerConnection);
+
+                //UserDetailService.UserDetailServiceClient client = new UserDetailServiceClient(_context);
+                //UserDetails = client.GetAllUsersAsync();
 
             }
             catch (Exception ex)
@@ -86,12 +110,16 @@ namespace DisplayRecordsModule.ViewModels
             }
         }
 
+        private void AddUser(Models.UserDetail userModel)
+        {
+            UserDetails.Add(userModel);
+            NotifyPropertyChangedSpecific(nameof(UserDetails));
+        }
         private void LostServerConnection(Exception ex)
         {
             IsBusy = false;
             _log.Info("lost server connection");
         }
         #endregion
-
     }
 }

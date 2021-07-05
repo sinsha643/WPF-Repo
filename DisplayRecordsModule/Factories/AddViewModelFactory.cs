@@ -15,16 +15,20 @@ namespace DisplayRecordsModule.Factories
     {
         private readonly IDisplayModuleService _displayModuleService;
         private readonly ILog _log;
+        private readonly IUserDetailCallbackClientService _callbackService;
 
-        public AddViewModelFactory(IDisplayModuleService displayModuleService, ILog log)
+        public AddViewModelFactory(IDisplayModuleService displayModuleService, 
+                                   ILog log, 
+                                   IUserDetailCallbackClientService callbackService)
         {
             _displayModuleService = displayModuleService;
             _log = log;
+            _callbackService = callbackService;
         }
 
         private IAddViewModel Create()
         {
-            return new AddRecordViewModel(_displayModuleService, _log);
+            return new AddRecordViewModel(_displayModuleService, _log, _callbackService);
         }
 
         public IAddRecordView CreateView()

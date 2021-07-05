@@ -32,8 +32,9 @@ namespace DisplayRecordsModuleTests.ViewModels
             var factory = MockRepository.GenerateStub<IAddViewModelFactory>();
             var service = MockRepository.GenerateStub<IDisplayModuleService>();
             service.Stub(mock => mock.GetUserDetailsAsync()).Return(Task.FromResult(GetUsers()));
-            var eventAggregator = MockRepository.GenerateStub<IEventAggregator>();
-            _displayRecordsVm = new DisplayRecordsViewModel(_windowService, factory, service, log);
+            var clientService = MockRepository.GenerateStub<IUserDetailCallbackClientService>();
+            var scheduler = MockRepository.GenerateStub<ISchedulerProvider>();
+            _displayRecordsVm = new DisplayRecordsViewModel(_windowService, factory, service, log, clientService, scheduler);
         }
 
         [TestMethod]
